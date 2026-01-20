@@ -11,6 +11,8 @@
 
 import 'reflect-metadata'
 import { Ignitor, prettyPrintError } from '@adonisjs/core'
+import { Database } from '@adonisjs/lucid/database'
+import AdminUserSeeder from '#database/seeders/admin_user_seeder'
 
 /**
  * URL to the application root. AdonisJS need it to resolve

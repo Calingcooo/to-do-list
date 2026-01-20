@@ -5,8 +5,6 @@ export default class TasksController {
   public async index({ response }: HttpContext) {
     const tasks = await Task.query().preload('user')
 
-    console.log(tasks)
-
     return response.ok({ tasks })
   }
 

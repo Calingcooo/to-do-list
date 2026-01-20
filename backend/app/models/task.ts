@@ -3,6 +3,8 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import User from './user.js'
 
+export type TaskStatus = 'todo' | 'ongoing' | 'completed'
+
 export default class Task extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
@@ -14,7 +16,7 @@ export default class Task extends BaseModel {
   declare description: string
 
   @column()
-  declare status: 'pending' | 'completed'
+  declare status: TaskStatus
 
   @column()
   declare user_id: number
