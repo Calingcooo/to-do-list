@@ -5,6 +5,8 @@ export default class TasksController {
   public async index({ response }: HttpContext) {
     const tasks = await Task.query().preload('user')
 
+    console.log(tasks)
+
     return response.ok({ tasks })
   }
 
@@ -38,10 +40,7 @@ export default class TasksController {
     await auth.check()
     const user = auth.user!
 
-    // const { id } = params.all()
     const foundTask = await Task.find(params.id)
-
-    console.log(typeof params.id)
 
     if (!foundTask) {
       return response.ok({

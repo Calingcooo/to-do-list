@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { getAuthHeaders } from '../utils/getAuthHeader.util';
 import type { LoginResponse, FetchCurrentUserResponse } from '../types/response.type';
 import type { User } from '../types/user.type';
 
@@ -28,14 +29,6 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
   ) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('access_token');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-  }
 
   async loadUser(): Promise<void> {
     const token = localStorage.getItem('access_token');
@@ -75,7 +68,7 @@ export class AuthService {
 
   async fetchCurrentUser(): Promise<User> {
     const observable$ = this.http.get<FetchCurrentUserResponse>(`${environment.apiUrl}/auth/me`, {
-      headers: this.getAuthHeaders(),
+      headers: getAuthHeaders(),
     });
 
     try {

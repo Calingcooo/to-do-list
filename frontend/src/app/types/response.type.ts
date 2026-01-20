@@ -1,4 +1,5 @@
 import type { User } from './user.type';
+import type { Task } from './task.type';
 
 export interface LoginResponse {
   success: boolean;
@@ -16,4 +17,8 @@ export interface LoginResponse {
 export interface FetchCurrentUserResponse {
   success: boolean;
   data: User;
+}
+
+export interface FetchCurrentUserTasksResponse {
+  tasks: Task[];
 }
