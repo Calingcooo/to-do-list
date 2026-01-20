@@ -8,8 +8,7 @@ export class GuestGuard {
   constructor(private router: Router) {}
 
   canActivate(): boolean | UrlTree {
-    debugger;
-    const isLoggedIn = localStorage.getItem('auth_token');
+    const isLoggedIn = localStorage.getItem('access_token');
 
     if (!isLoggedIn) {
       return true;

@@ -46,6 +46,10 @@ export class AuthService {
 
     try {
       const data = await lastValueFrom(observable$);
+
+      localStorage.setItem('access_token', data.token.token);
+      this.isAuthenticatedSubject.next(true);
+
       return data;
     } catch (error: any) {
       console.error('AuthService error:', error);

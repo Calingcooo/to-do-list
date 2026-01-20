@@ -1,4 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
@@ -19,6 +20,7 @@ export class Login {
   constructor(
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   async onSubmit(): Promise<void> {
@@ -35,6 +37,7 @@ export class Login {
       });
 
       console.log('Logged in successfully');
+      this.router.navigate(['/dashboard']);
     } catch (err: any) {
       console.error('Error caught:', err);
       this.errorMessage = err.message || 'Login failed';

@@ -6,7 +6,7 @@ import { Dashboard } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login },
-  { path: 'dashboard', component: Dashboard },
+  { path: 'login', component: Login, canActivate: [GuestGuard] },
+  { path: 'dashboard', component: Dashboard, canActivate: [AuthGuard] },
   // { path: '**', redirectTo: 'login' },
 ];
