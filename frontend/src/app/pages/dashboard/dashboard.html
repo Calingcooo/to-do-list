@@ -1,34 +1,61 @@
-<div class="px-5">
-    <app-header class="uppercase" [title]="taskflow" ></app-header>
-          
-    <app-tabs 
-        [(value)]="selectedTab"
-        [persist]="true"
-        storageKey="app-tab"
-        (valueChange)="onTabChange($event)"
-    />
+<div class="px-5 min-h-svh">
+  <app-header class="uppercase" [title]="taskflow"></app-header>
 
-    <div class="flex items-start space-x-5">
-        @if (isLoading) {
-            <div class="text-center py-8">
-                <p class="text-gray-500">Loading tasks...</p>
-            </div>
-        }
+  <div class="flex justify-end my-5">
+    <button
+      class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
+      Create new task
+    </button>
+  </div>
 
-        @if (errorMessage && !isLoading) {
-            <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
-                {{ errorMessage }}
-            </div>
-        }
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- TO DO -->
+    <div class="flex-1 bg-white rounded-xl shadow p-4">
+      <h2 class="text-lg font-semibold mb-4 text-blue-600">To Do</h2>
 
-        @if (!isLoading && tasks.length === 0) {
-            <div class="text-center py-8 text-gray-500">
-                <p>No tasks yet. Create your first task!</p>
-            </div>
-        }
-
+      <div class="space-x-3">
         @for (task of tasks; track task.id) {
-            <app-task-card [task]="task" />
+        @if (task.status === 'todo') {
+        <app-task-card
+          [task]="task"
+          (edit)="openModal($event)" />
         }
+        }
+        <!-- (statusChange)="updateStatus($event)" -->
+
+      </div>
     </div>
-</div>  
+
+    <!-- ON-GOING -->
+    <div class="flex-1 bg-white rounded-xl shadow p-4">
+      <h2 class="text-lg font-semibold mb-4 text-yellow-600">On-going</h2>
+
+      <div class="space-x-3">
+        @for (task of tasks; track task.id) {
+        @if (task.status === 'pending') {
+        <app-task-card [task]="task" (edit)="openModal($event)" />
+        }
+        }
+      </div>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="flex-1 bg-white rounded-xl shadow p-4">
+      <h2 class="text-lg font-semibold mb-4 text-green-600">Completed</h2>
+
+      <div class="space-x-3">
+        @for (task of tasks; track task.id) {
+        @if (task.status === 'completed') {
+        <app-task-card [task]="task" (edit)="openModal($event)" />
+        }
+        }
+      </div>
+    </div>
+
+    <app-task-modal
+      [task]="selectedTask"
+      [isOpen]="isModalOpen"
+      (close)="isModalOpen=false"
+      (save)="saveTask($event)" />
+  </div>
+</div>

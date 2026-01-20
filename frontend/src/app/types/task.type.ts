@@ -1,8 +1,10 @@
+export type TaskStatus = 'todo' | 'pending' | 'completed';
+
 export interface Task {
   id: number;
   title: string;
   description: string;
-  status: 'pending' | 'completed';
+  status: TaskStatus;
   user_id: number;
   user?: {
     id: number;

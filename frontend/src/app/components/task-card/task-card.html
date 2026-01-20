@@ -1,16 +1,34 @@
-<div class="w-80 h-40 p-4 bg-gray-50 shadow-sm rounded-sm relative">
-    <div class="flex h-full flex-col items-start justify-between">
-        <h1>Title</h1>
+<div
+  class="p-4 rounded-xl shadow-sm border-l-4 transition hover:shadow-md hover:scale-[1.02] cursor-pointer bg-white"
+  [ngClass]="statusClasses"
+  (click)="edit.emit(task)"
+>
+  <div class="flex items-start justify-between gap-3">
+    <div>
+      <p class="text-sm font-semibold capitalize" [ngClass]="titleClasses">
+        {{ task.title }}
+      </p>
 
-        <p>description</p>
+      @if (task.description) {
+        <p class="text-xs text-gray-500 mt-1">
+          {{ task.description }}
+        </p>
+      } @else {
+        <p class="text-xs text-gray-400 mt-1 italic">No description</p>
+      }
+    </div>
 
-        <div class="flex items-center justify-between w-full">
-            <p class="text-right">Date created</p>
-            <p class="">status</p>
-        </div>
-    </div>
-    
-    <div class="absolute top-2 right-3">
-        date created
-    </div>
+    <select
+      class="text-[10px] px-2 py-1 rounded-full font-semibold uppercase cursor-pointer border focus:outline-none"
+      [ngClass]="badgeClasses"
+      [(ngModel)]="task.status"
+      (change)="onStatusChange(); $event.stopPropagation()"
+    >
+      <option value="todo">To Do</option>
+      <option value="pending">On-going</option>
+      <option value="completed">Completed</option>
+    </select>
+  </div>
+
+  <div class="mt-3 text-[10px] text-gray-400">Updated: {{ task.updatedAt }}</div>
 </div>

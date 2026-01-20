@@ -5,12 +5,13 @@ import { TaskService } from '../../services/task.service';
 import { Header } from '../../components/header/header';
 import { Tabs } from '../../components/tabs/tabs';
 import { TaskCard } from '../../components/task-card/task-card';
+import { TaskModal } from '../../components/task-modal/task-modal';
 import type { User } from '../../types/user.type';
 import type { Task } from '../../types/task.type';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, Header, Tabs, TaskCard],
+  imports: [CommonModule, Header, TaskCard, TaskModal],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -21,6 +22,8 @@ export class Dashboard implements OnInit {
   tasks: Task[] = [];
   isLoading = false;
   errorMessage = '';
+  selectedTask!: Task;
+  isModalOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -58,5 +61,15 @@ export class Dashboard implements OnInit {
 
   onTabChange(value: string): void {
     this.selectedTab = value;
+  }
+
+  openModal(task: Task) {
+    this.selectedTask = task;
+    this.isModalOpen = true;
+  }
+
+  saveTask(updatedTask: Task) {
+    const index = this.tasks.findIndex((t) => t.id === updatedTask.id);
+    if (index > -1) this.tasks[index] = updatedTask;
   }
 }
