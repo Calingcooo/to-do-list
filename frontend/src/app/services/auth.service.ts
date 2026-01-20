@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import api from '../api/axios';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: number;
@@ -38,27 +39,30 @@ export class AuthService {
 
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private router: Router) {}
+  constructor(private http: HttpClient) {}
 
-  async login(payload: LoginRequest): Promise<LoginResponse> {
-    const res = await api.post<LoginResponse>('/login', payload);
-    localStorage.setItem('access_token', res.data.token.token);
-    return res.data;
+  async login(payload: { email: string; password: string }) {
+    const observable$ = this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, payload);
+
+    try {
+      const data = await lastValueFrom(observable$);
+      return data;
+    } catch (error: any) {
+      console.error('AuthService error:', error);
+      console.error('Error status:', error.status);
+      console.error('Error response:', error.error);
+
+      const message = error.error?.message || error.message || 'Login failed';
+      throw new Error(message);
+    }
   }
 
   /**
    * LOGOUT
    */
-  logout(): void {
-    localStorage.removeItem('access_token');
-    this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
-  }
-
-  /**
-   * TOKEN HELPER
-   */
-  getToken(): string | null {
-    return localStorage.getItem('access_token');
-  }
+  // logout(): void {
+  //   localStorage.removeItem('access_token');
+  //   this.isAuthenticatedSubject.next(false);
+  //   this.router.navigate(['/login']);
+  // }
 }

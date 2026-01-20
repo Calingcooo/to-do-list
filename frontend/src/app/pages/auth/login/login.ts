@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
@@ -16,11 +16,34 @@ export class Login {
   isLoading = false;
   errorMessage = '';
 
-  onSubmit(): void {
-    AuthService.login({ email, password })
-      .then(() => console.log('Logged in'))
-      .catch((err) => (this.errorMessage = err));
-  }
+  constructor(
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
-  togglePasswordVisibility(): void {}
+  async onSubmit(): Promise<void> {
+    console.log('onSubmit called, isLoading:', this.isLoading);
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.cdr.detectChanges();
+    console.log('isLoading set to true');
+
+    try {
+      await this.authService.login({
+        email: this.email,
+        password: this.password,
+      });
+
+      console.log('Logged in successfully');
+    } catch (err: any) {
+      console.error('Error caught:', err);
+      this.errorMessage = err.message || 'Login failed';
+      console.log('errorMessage set to:', this.errorMessage);
+    } finally {
+      console.log('Finally block executing');
+      this.isLoading = false;
+      this.cdr.detectChanges();
+      console.log('isLoading set to false:', this.isLoading);
+    }
+  }
 }

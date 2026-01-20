@@ -1,5 +1,5 @@
 <div class="min-w-svh min-h-svh flex items-center justify-center">
-  <form class="shadow-md w-1/4 rounded-md p-5" (ngSubmit)="onSubmit()">
+  <form class="shadow-md w-1/4 rounded-md p-5" (ngSubmit)="onSubmit()" #f="ngForm">
     <h1 class="text-center text-2xl font-bold mb-5">TASKFLOW</h1>
 
     <div class="flex flex-col gap-4 max-w-sm">
@@ -34,7 +34,19 @@
       </div>
     </div>
 
-    <button type="submit" class="bg-blue-500 hover:bg-blue-600 w-full mt-5 py-2 rounded-lg text-gray-200 uppercase">login</button>
+    @if (errorMessage) {
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mt-4 rounded">
+        <p class="text-sm">{{ errorMessage }}</p>
+      </div>
+    }
+    
+    <button
+      type="submit"
+      [disabled]="isLoading"
+      class="bg-blue-500 hover:bg-blue-600 w-full mt-5 py-2 rounded-lg text-gray-200 uppercase"
+    >
+      {{ isLoading ? 'Logging in…' : 'Login' }}
+    </button>
 
     <div class="bg-blue-200 mt-5 p-2 rounded-sm text-gray-800 space-y-1">
       <h1 class="text-xs capitalize">default admin credentials</h1>
