@@ -2,7 +2,9 @@
   <!-- Left: Title & Subtitle -->
   <div>
     <h1 class="text-2xl font-bold text-gray-900">{{title}}</h1>
-    <p *ngIf="subtitle" class="text-gray-600 mt-1 text-sm">{{subtitle}}</p>
+    @if (subtitle) {
+      <p class="text-gray-600 mt-1 text-sm">{{subtitle}}</p>
+    }
   </div>
 
   <!-- Right: User Profile & Actions -->
@@ -19,14 +21,14 @@
         
         <!-- User Info -->
         <div class="text-start">
-          <p class="font-medium text-gray-900 text-sm">{{userFullName}}</p>
+          <p class="font-medium text-gray-900 text-sm">{{ authService.getUser()?.fullName || 'user'}}</p>
           <div class="flex items-center gap-2">
             <span class="text-xs  py-0.5 rounded-full text-gray-500 capitalize"
                   [class]="{
-                    'bg-purple-100 text-purple-800': userRole === 'admin',
-                    'bg-green-100 text-green-800': userRole === 'user'
+                    'bg-purple-100 text-purple-800': authService.getUser()?.role === 'admin',
+                    'bg-green-100 text-green-800': authService.getUser()?.role === 'user'
                   }">
-              {{userRole}}
+              {{ authService.getUser()?.role }}
             </span>
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -40,10 +42,8 @@
         <!-- User Email -->
         <div class="px-4 py-3 border-b border-gray-100">
           <p class="text-xs text-gray-500">Signed in as</p>
-          <p class="text-sm font-medium text-gray-900 truncate">{{userEmail}}</p>
+          <p class="text-sm font-medium text-gray-900 truncate">{{ authService.getUser()?.email }}</p>
         </div>
-        
-        
         
         <div class="border-t border-gray-100 mt-2 pt-2">
           <button (click)="logout()" class="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 transition">
@@ -57,10 +57,12 @@
     </div>
 
     <!-- Admin Badge (if admin) -->
-    <div *ngIf="userRole === 'admin'" class="hidden md:block">
-      <span class="px-3 py-1.5 text-xs font-medium bg-purple-600 text-white rounded-full shadow-sm">
-        Admin
-      </span>
-    </div>
+     @if (authService.getUser()?.role === 'admin') {
+      <div  class="hidden md:block">
+        <span class="px-3 py-1.5 text-xs font-medium bg-purple-600 text-white rounded-full shadow-sm">
+          Admin
+        </span>
+      </div>
+     }
   </div>
 </header>

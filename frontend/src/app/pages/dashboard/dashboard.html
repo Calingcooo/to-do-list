@@ -2,13 +2,15 @@
     <app-header class="uppercase" [title]="taskflow" ></app-header>
           
     <div class="px-5">
-            <app-tabs 
-                [(value)]="selectedTab"
-                [persist]="true"
-                storageKey="app-tab"
-                (valueChange)="onTabChange($event)"
-            ></app-tabs>
+        <app-tabs 
+            [(value)]="selectedTab"
+            [persist]="true"
+            storageKey="app-tab"
+            (valueChange)="onTabChange($event)"
+        />
+    </div>
 
-            <p>dashboard works!</p>
+    <div>
+        <app-task-card />
     </div>
 </div>

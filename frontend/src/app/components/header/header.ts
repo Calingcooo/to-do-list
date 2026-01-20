@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -11,25 +11,22 @@ import { Router } from '@angular/router';
 export class Header {
   @Input() title: string = '';
   @Input() subtitle?: string;
-  @Input() userFullName: string = 'John Doe';
-  @Input() userEmail: string = 'john@example.com';
-  @Input() userRole: string = 'user'; // 'admin' or 'user'
-  @Output() onLogout = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  constructor(public authService: AuthService) {}
 
   getUserInitials(): string {
-    // Get first letters of first and last name
-    const names = this.userFullName.split(' ');
+    const user = this.authService.getUser();
+
+    if (!user?.fullName) return 'UD';
+
+    const names = user.fullName.split(' ');
     if (names.length >= 2) {
       return `${names[0][0]}${names[1][0]}`.toUpperCase();
     }
-    return this.userFullName.substring(0, 2).toUpperCase();
+    return user.fullName.substring(0, 2).toUpperCase();
   }
 
   logout(): void {
-    this.onLogout.emit();
-    // Optional: Add navigation
-    // this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }

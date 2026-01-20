@@ -1,32 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import type { LoginResponse, FetchCurrentUserResponse } from '../types/response.type';
+import type { User } from '../types/user.type';
 
-export interface User {
-  id: number;
-  email: string;
-  fullName: string;
-  role: 'user' | 'admin';
-}
-
-export interface LoginRequest {
+interface LoginRequest {
   email: string;
   password: string;
-}
-
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  token: {
-    type: string;
-    name: string | null;
-    token: string;
-    abilities: string[];
-    lastUsedAt: string | null;
-    expiresAt: string | null;
-  };
 }
 
 @Injectable({
@@ -37,11 +19,43 @@ export class AuthService {
     !!localStorage.getItem('access_token'),
   );
 
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
-  async login(payload: { email: string; password: string }) {
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  }
+
+  async loadUser(): Promise<void> {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        const storedUser = localStorage.getItem('user_data');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          this.currentUserSubject.next(user);
+        }
+
+        const freshUser = await this.fetchCurrentUser();
+        this.currentUserSubject.next(freshUser);
+      } catch (error) {
+        console.error('Failed to load user:', error);
+      }
+    }
+  }
+
+  async login(payload: LoginRequest) {
     const observable$ = this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, payload);
 
     try {
@@ -50,23 +64,45 @@ export class AuthService {
       localStorage.setItem('access_token', data.token.token);
       this.isAuthenticatedSubject.next(true);
 
+      await this.fetchCurrentUser();
+
       return data;
     } catch (error: any) {
-      console.error('AuthService error:', error);
-      console.error('Error status:', error.status);
-      console.error('Error response:', error.error);
-
       const message = error.error?.message || error.message || 'Login failed';
       throw new Error(message);
     }
   }
 
-  /**
-   * LOGOUT
-   */
-  // logout(): void {
-  //   localStorage.removeItem('access_token');
-  //   this.isAuthenticatedSubject.next(false);
-  //   this.router.navigate(['/login']);
-  // }
+  async fetchCurrentUser(): Promise<User> {
+    const observable$ = this.http.get<FetchCurrentUserResponse>(`${environment.apiUrl}/auth/me`, {
+      headers: this.getAuthHeaders(),
+    });
+
+    try {
+      const user = await lastValueFrom(observable$);
+      this.currentUserSubject.next(user.data);
+      console.log({ user });
+
+      localStorage.setItem('user_data', JSON.stringify(user.data));
+
+      return user.data;
+    } catch (error: any) {
+      const message = error.error?.message || error.message || 'Cannot fetch user data';
+      throw new Error(message);
+    }
+  }
+
+  getUser(): User | null {
+    const storedUser = localStorage.getItem('user_data');
+    if (storedUser) {
+      return JSON.parse(storedUser);
+    }
+    return this.currentUserSubject.value;
+  }
+
+  logout(): void {
+    localStorage.removeItem('access_token');
+    this.isAuthenticatedSubject.next(false);
+    this.router.navigate(['/login']);
+  }
 }
