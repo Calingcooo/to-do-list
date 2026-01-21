@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 export class Header {
   @Input() title: string = '';
   @Input() subtitle?: string;
+  @Output() createTask = new EventEmitter<void>();
 
   constructor(public authService: AuthService) {}
 
@@ -24,6 +25,10 @@ export class Header {
       return `${names[0][0]}${names[1][0]}`.toUpperCase();
     }
     return user.fullName.substring(0, 2).toUpperCase();
+  }
+
+  onAddTask() {
+    this.createTask.emit();
   }
 
   logout(): void {

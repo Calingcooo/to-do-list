@@ -12,7 +12,6 @@ export class TaskBoard {
   @Output() createTask = new EventEmitter<void>();
 
   onAddTask() {
-    console.log('Hit!');
     this.createTask.emit();
   }
 }

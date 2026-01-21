@@ -3,8 +3,16 @@
         <h2 class="text-2xl capitalize font-semibold">
             {{ title }}
         </h2>
-        <p
-            class="text-gray-700 text-2xl px-2 cursor-pointer hover:bg-gray-200">+</p>
+        <svg
+            (click)="onAddTask()"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-8 h-8 hover:bg-gray-200 p-1 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
     </div>
 
     <div class="p-4 space-x-1 border rounded-lg bg-white">
