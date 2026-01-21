@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { TaskService } from '../../services/task.service';
 import { Header } from '../../components/header/header';
-import { Tabs } from '../../components/tabs/tabs';
+import { TaskBoard } from '../../components/task-board/task-board';
 import { TaskCard } from '../../components/task-card/task-card';
 import { TaskModal } from '../../components/task-modal/task-modal';
 import type { User } from '../../types/user.type';
@@ -11,7 +11,7 @@ import type { Task } from '../../types/task.type';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, Header, TaskCard, TaskModal],
+  imports: [CommonModule, Header, TaskBoard, TaskCard, TaskModal],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

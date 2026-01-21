@@ -1,55 +1,38 @@
-<div class="px-5 min-h-svh">
-  <app-header class="uppercase" [title]="taskflow"></app-header>
+<div class="min-h-svh">
+  <app-header class="uppercase" [title]="taskflow" />
 
-  <div class="flex justify-end my-5">
-    <button
-      class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
-      Create new task
-    </button>
-  </div>
-
-  <div class="flex flex-col md:flex-row gap-6">
+  <div class="flex flex-col md:flex-row gap-6 m-5">
     <!-- TO DO -->
-    <div class="flex-1 bg-white rounded-xl shadow p-4">
-      <h2 class="text-lg font-semibold mb-4 text-blue-600">To Do</h2>
-
-      <div class="space-x-3">
+    <div class="flex-1">
+      <task-board title="to do">
         @for (task of tasks; track task.id) {
-        @if (task.status === 'todo') {
-        <app-task-card
-          [task]="task"
-          (edit)="openModal($event)" />
-        }
-        }
-        <!-- (statusChange)="updateStatus($event)" -->
-
-      </div>
-    </div>
-
-    <!-- ON-GOING -->
-    <div class="flex-1 bg-white rounded-xl shadow p-4">
-      <h2 class="text-lg font-semibold mb-4 text-yellow-600">On-going</h2>
-
-      <div class="space-x-3">
-        @for (task of tasks; track task.id) {
-        @if (task.status === 'pending') {
+        @if (task.status === "todo") {
         <app-task-card [task]="task" (edit)="openModal($event)" />
         }
         }
-      </div>
+      </task-board>
+    </div>
+
+    <!-- ON-GOING -->
+    <div class="flex-1">
+      <task-board title="In-progress">
+        @for (task of tasks; track task.id) {
+        @if (task.status === "pending") {
+        <app-task-card [task]="task" (edit)="openModal($event)" />
+        }
+        }
+      </task-board>
     </div>
 
     <!-- COMPLETED -->
-    <div class="flex-1 bg-white rounded-xl shadow p-4">
-      <h2 class="text-lg font-semibold mb-4 text-green-600">Completed</h2>
-
-      <div class="space-x-3">
+    <div class="flex-1">
+      <task-board title="done">
         @for (task of tasks; track task.id) {
         @if (task.status === 'completed') {
         <app-task-card [task]="task" (edit)="openModal($event)" />
         }
         }
-      </div>
+      </task-board>
     </div>
 
     <app-task-modal

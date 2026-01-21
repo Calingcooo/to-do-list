@@ -7,7 +7,6 @@ import type { Task } from '../../types/task.type';
   selector: 'app-task-card',
   imports: [CommonModule, FormsModule],
   templateUrl: './task-card.html',
-  styleUrl: './task-card.css',
 })
 export class TaskCard {
   @Input({ required: true }) task!: Task;
@@ -17,7 +16,7 @@ export class TaskCard {
   get statusClasses(): string {
     switch (this.task.status) {
       case 'todo':
-        return 'bg-blue-50 border-blue-400';
+        return 'bg-blue-50 border border-gray-200 hover:border-gray-500';
       case 'pending':
         return 'bg-yellow-50 border-yellow-400';
       case 'completed':
