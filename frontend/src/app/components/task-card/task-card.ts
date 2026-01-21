@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TaskService } from '../../services/task.service';
 import type { Task } from '../../types/task.type';
 
 @Component({
@@ -12,6 +13,9 @@ export class TaskCard {
   @Input({ required: true }) task!: Task;
   @Output() statusChange = new EventEmitter<any>();
   @Output() edit = new EventEmitter<Task>();
+  errorMessage = '';
+
+  constructor(private taskService: TaskService) {}
 
   get statusClasses(): string {
     switch (this.task.status) {
@@ -48,7 +52,18 @@ export class TaskCard {
     }
   }
 
-  onStatusChange() {
-    this.statusChange.emit(this.task);
+  async onStatusChange() {
+    this.errorMessage = '';
+
+    console.log(this.task);
+
+    try {
+      const updatedTask = await this.taskService.editTask(this.task);
+
+      this.edit.emit(updatedTask);
+    } catch (err: any) {
+      this.errorMessage = err.message || 'Failed to save task';
+      console.error('Error saving task:', err);
+    }
   }
 }

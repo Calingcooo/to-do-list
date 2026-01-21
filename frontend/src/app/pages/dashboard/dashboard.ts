@@ -50,6 +50,8 @@ export class Dashboard implements OnInit {
 
     try {
       this.tasks = await this.taskService.loadUserTasks();
+
+      console.log(this.tasks);
     } catch (err: any) {
       this.errorMessage = err.message || 'Failed to load tasks';
       console.error('Error loading tasks:', err);

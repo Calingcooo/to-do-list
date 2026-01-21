@@ -46,7 +46,7 @@ export default class TasksController {
       })
     }
 
-    if (foundTask.user_id !== user.id && user.role !== 'admin') {
+    if (foundTask.userId !== user.id && user.role !== 'admin') {
       return response.forbidden({
         message: 'You can only delete your own tasks',
       })
