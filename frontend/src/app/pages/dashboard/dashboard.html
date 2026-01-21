@@ -3,11 +3,11 @@
 
   <div class="flex flex-col md:flex-row gap-6 m-5">
     <!-- TO DO -->
-    <div class="flex-1">
+    <div class="flex-1" (createTask)="openCreateModal()">
       <task-board title="to do">
         @for (task of tasks; track task.id) {
         @if (task.status === "todo") {
-        <app-task-card [task]="task" (edit)="openModal($event)" />
+        <app-task-card [task]="task" (edit)="openEditModal($event)" />
         }
         }
       </task-board>
@@ -15,21 +15,21 @@
 
     <!-- ON-GOING -->
     <div class="flex-1">
-      <task-board title="In-progress">
+      <task-board title="In-progress" (createTask)="openCreateModal()">
         @for (task of tasks; track task.id) {
         @if (task.status === "pending") {
-        <app-task-card [task]="task" (edit)="openModal($event)" />
+        <app-task-card [task]="task" (edit)="openEditModal($event)" />
         }
         }
       </task-board>
     </div>
 
     <!-- COMPLETED -->
-    <div class="flex-1">
+    <div class="flex-1" (createTask)="openCreateModal()">
       <task-board title="done">
         @for (task of tasks; track task.id) {
         @if (task.status === 'completed') {
-        <app-task-card [task]="task" (edit)="openModal($event)" />
+        <app-task-card [task]="task" (edit)="openEditModal($event)" />
         }
         }
       </task-board>
@@ -38,7 +38,10 @@
     <app-task-modal
       [task]="selectedTask"
       [isOpen]="isModalOpen"
-      (close)="isModalOpen=false"
-      (save)="saveTask($event)" />
+      (close)="isModalOpen = false"
+      (save)="saveTask($event)"
+      (create)="addTask($event)">
+    </app-task-modal>
+
   </div>
 </div>

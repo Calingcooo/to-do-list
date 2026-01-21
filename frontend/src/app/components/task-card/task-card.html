@@ -17,10 +17,11 @@
     </div>
 
     <select
-      class="text-[10px] px-2 py-1 rounded-full font-semibold uppercase cursor-pointer border focus:outline-none"
+      class="text-[10px] px-2 py-1 rounded-full font-semibold uppercase cursor-pointer border hover focus:outline-none"
       [ngClass]="badgeClasses"
       [(ngModel)]="task.status"
-      (change)="onStatusChange(); $event.stopPropagation()">
+      (click)="$event.stopPropagation()"
+      (change)="onStatusChange()">
       <option value="todo">To Do</option>
       <option value="pending">In-Progress</option>
       <option value="completed">Done</option>
@@ -32,6 +33,7 @@
     <!-- Updated: {{ task.updatedAt }} -->
     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
       class="w-6 h-6 hover:bg-gray-200 rounded-md p-1 cursor-pointer"
+      (click)="edit.emit(task); $event.stopPropagation()"
       fill="none"><g
         id="SVGRepo_bgCarrier" stroke-width="0"></g><g
         id="SVGRepo_tracerCarrier" stroke-linecap="round"

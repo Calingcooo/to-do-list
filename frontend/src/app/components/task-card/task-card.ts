@@ -38,13 +38,13 @@ export class TaskCard {
   get badgeClasses(): string {
     switch (this.task.status) {
       case 'todo':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-blue-100 text-blue-700 hover:border-blue-300';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-700';
+        return 'bg-yellow-100 text-yellow-700 hover:border-yellow-300';
       case 'completed':
-        return 'bg-green-100 text-green-700';
+        return 'bg-green-100 text-green-700 hover:border-green-300';
       default:
-        return 'bg-gray-100 text-gray-700';
+        return 'bg-gray-100 text-gray-700 hover:border-gray-300';
     }
   }
 

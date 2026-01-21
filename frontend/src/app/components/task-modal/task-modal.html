@@ -1,8 +1,9 @@
-<div
-    *ngIf="isOpen"
-    class="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
+@if (isOpen) {
+<div class="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
     <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-        <h2 class="text-lg font-bold mb-4">Edit Task</h2>
+        <h2 class="text-lg font-bold mb-4">
+            {{ isCreateMode ? 'Create Task' : 'Edit Task' }}
+        </h2>
 
         <label
             class="block mb-2 text-sm font-medium text-gray-700">Title</label>
@@ -35,9 +36,11 @@
             </button>
             <button
                 class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                (click)="onSave()">
-                Save
+                (click)="isCreateMode ? onCreate() : onSave()">
+                {{ isCreateMode ? 'Create' : 'Save' }}
             </button>
         </div>
     </div>
 </div>
+
+}

@@ -3,7 +3,7 @@ import Task from '#models/task'
 
 export default class TasksController {
   public async index({ response }: HttpContext) {
-    const tasks = await Task.query().preload('user')
+    const tasks = await Task.query()
 
     return response.ok({ tasks })
   }

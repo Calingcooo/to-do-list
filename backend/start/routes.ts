@@ -22,10 +22,10 @@ router.get('/', async () => {
 router
   .group(() => {
     ;(router.get('user-tasks', [TasksController, 'index']),
-      router.post('create-task', [TasksController, 'createTask']),
-      router.put('update-task', [TasksController, 'updateTask']),
+      router.post('create', [TasksController, 'createTask']),
+      router.put('edit/:id', [TasksController, 'updateTask']),
       router
-        .delete('delete-task/:id', [TasksController, 'destroy'])
+        .delete('delete/:id', [TasksController, 'destroy'])
         .where('id', router.matchers.number()))
   })
   .prefix('task')

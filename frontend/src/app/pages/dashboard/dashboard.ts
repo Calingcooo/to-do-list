@@ -63,13 +63,26 @@ export class Dashboard implements OnInit {
     this.selectedTab = value;
   }
 
-  openModal(task: Task) {
-    this.selectedTask = task;
+  openCreateModal() {
+    this.selectedTask = {
+      title: '',
+      description: '',
+      status: 'todo',
+    } as Task;
+    this.isModalOpen = true;
+  }
+
+  openEditModal(task: Task) {
+    this.selectedTask = { ...task };
     this.isModalOpen = true;
   }
 
   saveTask(updatedTask: Task) {
     const index = this.tasks.findIndex((t) => t.id === updatedTask.id);
     if (index > -1) this.tasks[index] = updatedTask;
+  }
+
+  addTask(newTask: Task) {
+    this.tasks.unshift(newTask);
   }
 }

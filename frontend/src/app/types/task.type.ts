@@ -6,11 +6,4 @@ export interface Task {
   description: string;
   status: TaskStatus;
   user_id: number;
-  user?: {
-    id: number;
-    fullName: string;
-    email: string;
-  };
-  createdAt: string | Date;
-  updatedAt: string | Date;
 }

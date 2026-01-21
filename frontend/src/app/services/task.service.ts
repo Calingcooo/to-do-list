@@ -25,6 +25,8 @@ export class TaskService {
     try {
       const response = await lastValueFrom(observable$);
 
+      console.log(response.tasks);
+
       this.userTasksSubject.next(response.tasks);
 
       return response.tasks;
@@ -36,5 +38,43 @@ export class TaskService {
 
   getTasks(): Task[] {
     return this.userTasksSubject.value;
+  }
+
+  async editTask(updatedTask: Partial<Task> & { id: number }): Promise<Task> {
+    try {
+      const observable$ = this.http.put<Task>(
+        `${environment.apiUrl}/task/edit/${updatedTask.id}`,
+        updatedTask,
+        { headers: getAuthHeaders() },
+      );
+
+      const task = await lastValueFrom(observable$);
+
+      const tasks = this.userTasksSubject.value.map((t) => (t.id === task.id ? task : t));
+      this.userTasksSubject.next(tasks);
+
+      return task;
+    } catch (error: any) {
+      const message = error.error?.message || error.message || 'Cannot update task';
+      throw new Error(message);
+    }
+  }
+
+  async createTask(taskData: Task): Promise<Task> {
+    try {
+      const observable$ = this.http.post<Task>(`${environment.apiUrl}/task/create`, taskData, {
+        headers: getAuthHeaders(),
+      });
+
+      const task = await lastValueFrom(observable$);
+
+      const tasks = this.userTasksSubject.value.map((t) => (t.id === task.id ? task : t));
+      this.userTasksSubject.next(tasks);
+
+      return task;
+    } catch (error: any) {
+      const message = error.error?.message || error.message || 'Cannot create new task';
+      throw new Error(message);
+    }
   }
 }

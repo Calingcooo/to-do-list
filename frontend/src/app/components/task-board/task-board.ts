@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'task-board',
@@ -8,4 +9,10 @@ import { CommonModule } from '@angular/common';
 })
 export class TaskBoard {
   @Input() title!: string;
+  @Output() createTask = new EventEmitter<void>();
+
+  onAddTask() {
+    console.log('Hit!');
+    this.createTask.emit();
+  }
 }
