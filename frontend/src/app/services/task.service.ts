@@ -53,7 +53,7 @@ export class TaskService {
 
       return task;
     } catch (error: any) {
-      const message = error.error?.message || error.message || 'Cannot update task';
+      const message = error.error?.message || error.message || 'Failed to update task';
       throw new Error(message);
     }
   }
@@ -71,7 +71,24 @@ export class TaskService {
 
       return task;
     } catch (error: any) {
-      const message = error.error?.message || error.message || 'Cannot create new task';
+      const message = error.error?.message || error.message || 'Failed to create new task';
+      throw new Error(message);
+    }
+  }
+
+  async deleteTask(task: Task): Promise<void> {
+    try {
+      await lastValueFrom(
+        this.http.delete<{ message: string }>(`${environment.apiUrl}/task/delete/${task.id}`, {
+          headers: getAuthHeaders(),
+        }),
+      );
+
+      const updatedTasks = this.userTasksSubject.value.filter((t) => t.id !== task.id);
+
+      this.userTasksSubject.next(updatedTasks);
+    } catch (error: any) {
+      const message = error.error?.message || error.message || 'Failed to delete task';
       throw new Error(message);
     }
   }

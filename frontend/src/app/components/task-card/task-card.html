@@ -37,7 +37,7 @@
     <!-- Updated: {{ task.updatedAt }} -->
     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
       class="w-6 h-6 hover:bg-gray-200 rounded-md p-1 cursor-pointer"
-      (click)="edit.emit(task); $event.stopPropagation()"
+      (click)="onStatusChange(); $event.stopPropagation()"
       fill="none"><g
         id="SVGRepo_bgCarrier" stroke-width="0"></g><g
         id="SVGRepo_tracerCarrier" stroke-linecap="round"
@@ -47,6 +47,7 @@
       </g></svg>
     <svg xmlns="http://www.w3.org/2000/svg"
       class="w-6 h-6 text-red-500 hover:text-red-700 hover:bg-gray-200 rounded-md p-1 cursor-pointer"
+      (click)="onTaskDelete(); $event.stopPropagation()"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor">

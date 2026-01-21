@@ -2,20 +2,32 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Task from '#models/task'
 
 export default class TasksController {
-  public async index({ response }: HttpContext) {
-    const tasks = await Task.query()
+  public async index({ auth, response }: HttpContext) {
+    const user = auth.user!
 
-    return response.ok({ tasks })
+    try {
+      const tasks = await Task.query().where('user_id', user.id)
+
+      return response.ok({ tasks })
+    } catch (error) {
+      console.error(error)
+      return response.internalServerError({ error: error })
+    }
   }
 
   public async createTask({ request, auth, response }: HttpContext) {
-    await auth.check()
+    const user = auth.user!
 
-    const data = request.all()
+    const payload = request.only(['title', 'description', 'status'])
 
-    const task = await Task.create(data)
+    try {
+      const task = await Task.create({ ...payload, userId: user.id })
 
-    return response.created(task)
+      return response.created(task)
+    } catch (error) {
+      console.error(error)
+      return response.internalServerError({ error: error })
+    }
   }
 
   public async updateTask({ request, response }: HttpContext) {

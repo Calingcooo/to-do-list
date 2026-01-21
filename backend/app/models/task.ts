@@ -18,7 +18,7 @@ export default class Task extends BaseModel {
   @column()
   declare status: TaskStatus
 
-  @column()
+  @column({ columnName: 'user_id' })
   declare userId: number
 
   @belongsTo(() => User, {

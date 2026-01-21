@@ -13,6 +13,7 @@ export class TaskCard {
   @Input({ required: true }) task!: Task;
   @Output() statusChange = new EventEmitter<any>();
   @Output() edit = new EventEmitter<Task>();
+  @Output() delete = new EventEmitter<Task>();
   errorMessage = '';
 
   constructor(private taskService: TaskService) {}
@@ -55,8 +56,6 @@ export class TaskCard {
   async onStatusChange() {
     this.errorMessage = '';
 
-    console.log(this.task);
-
     try {
       const updatedTask = await this.taskService.editTask(this.task);
 
@@ -64,6 +63,20 @@ export class TaskCard {
     } catch (err: any) {
       this.errorMessage = err.message || 'Failed to save task';
       console.error('Error saving task:', err);
+    }
+  }
+
+  async onTaskDelete() {
+    const confirmed = confirm(`Are you sure you want to delete "${this.task.title}"?`);
+
+    if (!confirmed) return;
+
+    try {
+      await this.taskService.deleteTask(this.task);
+
+      this.delete.emit(this.task);
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete task');
     }
   }
 }
