@@ -3,8 +3,8 @@
 
   <div class="flex flex-col md:flex-row gap-6 m-5">
     <!-- TO DO -->
-    <div class="flex-1" (createTask)="openCreateModal()">
-      <task-board title="to do">
+    <div class="flex-1">
+      <task-board title="to do" (createTask)="openCreateModal()">
         @for (task of tasks; track task.id) {
         @if (task.status === "todo") {
         <app-task-card [task]="task" (edit)="openEditModal($event)" />
@@ -25,8 +25,8 @@
     </div>
 
     <!-- COMPLETED -->
-    <div class="flex-1" (createTask)="openCreateModal()">
-      <task-board title="done">
+    <div class="flex-1">
+      <task-board title="done" (createTask)="openCreateModal()">
         @for (task of tasks; track task.id) {
         @if (task.status === 'completed') {
         <app-task-card [task]="task" (edit)="openEditModal($event)" />

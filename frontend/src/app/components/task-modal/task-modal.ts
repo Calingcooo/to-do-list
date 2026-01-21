@@ -54,7 +54,6 @@ export class TaskModal {
 
   async onCreate() {
     if (!this.tempTask) return;
-
     this.isSaving = true;
     this.errorMessage = '';
 

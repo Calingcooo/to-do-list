@@ -25,8 +25,6 @@ export class TaskService {
     try {
       const response = await lastValueFrom(observable$);
 
-      console.log(response.tasks);
-
       this.userTasksSubject.next(response.tasks);
 
       return response.tasks;
