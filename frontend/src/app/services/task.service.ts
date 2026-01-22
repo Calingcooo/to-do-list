@@ -12,7 +12,7 @@ import type { Task } from '../types/task.type';
 export class TaskService {
   private userTasksSubject = new BehaviorSubject<Task[]>([]);
 
-  userTasksSubject$ = this.userTasksSubject.asObservable();
+  userTasks$ = this.userTasksSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -66,8 +66,7 @@ export class TaskService {
 
       const task = await lastValueFrom(observable$);
 
-      const tasks = this.userTasksSubject.value.map((t) => (t.id === task.id ? task : t));
-      this.userTasksSubject.next(tasks);
+      this.userTasksSubject.next([task, ...this.userTasksSubject.value]);
 
       return task;
     } catch (error: any) {

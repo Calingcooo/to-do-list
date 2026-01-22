@@ -24,7 +24,6 @@ export class Login {
   ) {}
 
   async onSubmit(): Promise<void> {
-    console.log('onSubmit called, isLoading:', this.isLoading);
     this.isLoading = true;
     this.errorMessage = '';
     this.cdr.detectChanges();
@@ -36,17 +35,12 @@ export class Login {
         password: this.password,
       });
 
-      console.log('Logged in successfully');
       this.router.navigate(['/dashboard']);
     } catch (err: any) {
-      console.error('Error caught:', err);
       this.errorMessage = err.message || 'Login failed';
-      console.log('errorMessage set to:', this.errorMessage);
     } finally {
-      console.log('Finally block executing');
       this.isLoading = false;
       this.cdr.detectChanges();
-      console.log('isLoading set to false:', this.isLoading);
     }
   }
 }

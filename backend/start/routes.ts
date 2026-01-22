@@ -36,6 +36,7 @@ router
     router.post('new-user', [UsersController, 'newUser'])
   })
   .prefix('user')
+  .use(middleware.auth({ guards: ['api'] }))
 
 router
   .group(() => {

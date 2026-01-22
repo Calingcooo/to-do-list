@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { TaskService } from '../../services/task.service';
@@ -16,53 +17,33 @@ import type { Task } from '../../types/task.type';
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
-  taskflow: string = 'TaskFlow';
-  selectedTab: string = 'pending';
-  currentUser: User | null = null;
-  tasks: Task[] = [];
-  isLoading = false;
-  errorMessage = '';
+  taskflow = 'TaskFlow';
+
+  tasks$!: Observable<Task[]>;
+
   selectedTask!: Task;
   isModalOpen = false;
+  errorMessage = '';
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
     private taskService: TaskService,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   async ngOnInit(): Promise<void> {
-    if (typeof window !== 'undefined') {
-      const savedTab = localStorage.getItem('app-tab');
-      if (savedTab) {
-        this.selectedTab = savedTab;
-      }
-    }
-
     this.authService.getUser();
-    await this.loadTasks();
-  }
 
-  async loadTasks(): Promise<void> {
+    this.tasks$ = this.taskService.userTasks$;
+
     this.isLoading = true;
-    this.errorMessage = '';
-    this.cdr.detectChanges();
-
     try {
-      this.tasks = await this.taskService.loadUserTasks();
-
-      console.log(this.tasks);
+      await this.taskService.loadUserTasks();
     } catch (err: any) {
       this.errorMessage = err.message || 'Failed to load tasks';
-      console.error('Error loading tasks:', err);
     } finally {
       this.isLoading = false;
-      this.cdr.detectChanges();
     }
-  }
-
-  onTabChange(value: string): void {
-    this.selectedTab = value;
   }
 
   openCreateModal() {
@@ -71,6 +52,7 @@ export class Dashboard implements OnInit {
       description: '',
       status: 'todo',
     } as Task;
+
     this.isModalOpen = true;
   }
 
@@ -79,12 +61,12 @@ export class Dashboard implements OnInit {
     this.isModalOpen = true;
   }
 
-  saveTask(updatedTask: Task) {
-    const index = this.tasks.findIndex((t) => t.id === updatedTask.id);
-    if (index > -1) this.tasks[index] = updatedTask;
-  }
+  // saveTask(updatedTask: Task) {
+  //   const index = this.tasks$.some((t) => t.id === updatedTask.id);
+  //   if (index > -1) this.taskService.userTasks$[index] = updatedTask;
+  // }
 
-  addTask(newTask: Task) {
-    this.tasks.unshift(newTask);
-  }
+  // addTask(newTask: Task) {
+  //   this.tasks.unshift(newTask);
+  // }
 }

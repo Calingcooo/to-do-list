@@ -3,7 +3,7 @@ import User from '#models/user'
 
 export default class UsersController {
   async me({ auth, response }: HttpContext) {
-    const user = await auth.authenticate()
+    const user = auth.user!
 
     return response.ok({
       id: user.id,
@@ -13,11 +13,23 @@ export default class UsersController {
     })
   }
 
-  async newUser({ request, response }: HttpContext) {
+  async newUser({ request, auth, response }: HttpContext) {
+    await auth.check()
+    const user = auth.user!
+
+    if (user.role !== 'admin') {
+      return response.unauthorized({ message: 'You do not have permission to create new user' })
+    }
+
     const data = request.only(['fullName', 'email', 'password', 'role'])
 
-    const user = await User.create(data)
+    try {
+      const createdUser = await User.create(data)
 
-    return response.ok(user)
+      return response.ok(createdUser)
+    } catch (error) {
+      console.error(error)
+      return response.internalServerError({ error: error })
+    }
   }
 }
