@@ -4,16 +4,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { TaskService } from '../../services/task.service';
+import { UserService } from '../../services/user.service';
 import { Header } from '../../components/header/header';
 import { TaskBoard } from '../../components/task-board/task-board';
 import { TaskCard } from '../../components/task-card/task-card';
 import { TaskModal } from '../../components/task-modal/task-modal';
+import { UserCard } from '../../components/user-card/user-card';
 import { Tabs } from '../../components/tabs/tabs';
 import type { Task } from '../../types/task.type';
+import type { User } from '../../types/user.type';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, Header, TaskBoard, TaskCard, TaskModal, Tabs],
+  imports: [CommonModule, Header, TaskBoard, UserCard, TaskCard, TaskModal, Tabs],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -22,6 +25,7 @@ export class Dashboard implements OnInit {
   taskflow = 'TaskFlow';
 
   tasks$!: Observable<Task[]>;
+  users$!: Observable<User[]>;
 
   selectedTask!: Task;
   isModalOpen = false;
@@ -31,6 +35,7 @@ export class Dashboard implements OnInit {
   constructor(
     public authService: AuthService,
     private taskService: TaskService,
+    private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
@@ -50,12 +55,22 @@ export class Dashboard implements OnInit {
     }
 
     this.tasks$ = this.taskService.userTasks$;
+    this.users$ = this.userService.users$;
 
     this.isLoading = true;
+
     try {
-      await this.taskService.loadUserTasks();
+      if (this.selectedTab === 'my_task') {
+        console.log(this.selectedTab);
+        await this.taskService.loadUserTasks();
+      }
+
+      if (this.selectedTab === 'users') {
+        console.log(this.selectedTab);
+        await this.userService.loadUsers();
+      }
     } catch (err: any) {
-      this.errorMessage = err.message || 'Failed to load tasks';
+      this.errorMessage = err.message || 'Something went wrong, please try again';
     } finally {
       this.isLoading = false;
     }
@@ -78,6 +93,7 @@ export class Dashboard implements OnInit {
 
   onTabChange(tab: string) {
     console.log('value change!!');
+
     this.selectedTab = tab;
   }
 }

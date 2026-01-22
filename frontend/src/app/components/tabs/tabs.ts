@@ -6,7 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
   selector: 'app-tabs',
   imports: [CommonModule],
   templateUrl: './tabs.html',
-  styleUrl: './tabs.css',
 })
 export class Tabs implements OnInit {
   @Input() value: string = 'my_task';

@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 
 export default class UsersController {
@@ -27,6 +27,23 @@ export default class UsersController {
       const createdUser = await User.create(data)
 
       return response.ok(createdUser)
+    } catch (error) {
+      console.error(error)
+      return response.internalServerError({ error: error })
+    }
+  }
+
+  async getAllUsers({ auth, response }: HttpContext) {
+    const user = auth.user!
+
+    if (user.role !== 'admin') {
+      return response.unauthorized({ message: 'You have no permission for this action' })
+    }
+
+    try {
+      const users = await User.query().whereNot('id', user.id)
+
+      return response.ok({ users })
     } catch (error) {
       console.error(error)
       return response.internalServerError({ error: error })

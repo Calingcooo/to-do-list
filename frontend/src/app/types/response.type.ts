@@ -22,3 +22,7 @@ export interface FetchCurrentUserResponse {
 export interface FetchCurrentUserTasksResponse {
   tasks: Task[];
 }
+
+export interface FetchUsersResponse {
+  users: User[];
+}

@@ -33,7 +33,8 @@ router
 
 router
   .group(() => {
-    router.post('new-user', [UsersController, 'newUser'])
+    ;(router.post('new-user', [UsersController, 'newUser']),
+      router.get('all', [UsersController, 'getAllUsers']))
   })
   .prefix('user')
   .use(middleware.auth({ guards: ['api'] }))
