@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -7,47 +8,38 @@ import { CommonModule } from '@angular/common';
   templateUrl: './tabs.html',
   styleUrl: './tabs.css',
 })
-export class Tabs implements OnInit, OnDestroy {
-  @Input() value: string = 'pending';
-  @Input() storageKey: string = 'app-tabs-selection'; // Unique key for localStorage
-  @Input() persist: boolean = true; // Enable/disable persistence
+export class Tabs implements OnInit {
+  @Input() value: string = 'my_task';
   @Output() valueChange = new EventEmitter<string>();
 
-  // Tab options
   tabs = [
-    { value: 'pending', label: 'To Do' },
-    { value: 'completed', label: 'Completed' },
+    { value: 'my_task', label: 'My Tasks' },
+    { value: 'users', label: 'Users' },
   ];
 
-  ngOnInit(): void {
-    if (this.persist && typeof window !== 'undefined') {
-      const savedValue = localStorage.getItem(this.storageKey);
-      if (savedValue && this.tabs.some((tab) => tab.value === savedValue)) {
-        this.value = savedValue;
-        this.valueChange.emit(savedValue);
-      }
-    }
-  }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
-  ngOnDestroy(): void {
-    // Cleanup if needed
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      const tab = params.get('tab');
+      if (tab && this.tabs.some((t) => t.value === tab)) {
+        this.value = tab;
+      }
+    });
   }
 
   selectTab(tabValue: string): void {
     this.value = tabValue;
 
-    if (this.persist && typeof window !== 'undefined') {
-      localStorage.setItem(this.storageKey, tabValue);
-    }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: tabValue },
+      queryParamsHandling: 'merge',
+    });
 
-    console.log({ tabValue, persisted: this.persist });
     this.valueChange.emit(tabValue);
-  }
-
-  // Optional: Method to clear persisted state
-  clearPersistedState(): void {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(this.storageKey);
-    }
   }
 }
