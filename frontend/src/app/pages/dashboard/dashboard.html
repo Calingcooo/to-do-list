@@ -1,0 +1,69 @@
+<div class="min-h-svh relative">
+  <app-view-user-sidebar
+    [isOpen]="isSidebarOpen"
+    [selectedUser]="selectedUser"
+    (closeSidebar)="isSidebarOpen = false"
+    (edit)="openEditModal($event)"
+    (delete)="onTaskDelete($event)" />
+  <app-header class="uppercase" [title]="taskflow" />
+
+  @if ((authService.currentUser$ | async)?.role === 'admin') {
+  <app-tabs [value]="selectedTab" (valueChange)="onTabChange($event)" />
+  }
+
+  @if (selectedTab === 'my_task') {
+  <div class="flex flex-col md:flex-row gap-6 m-5">
+    <!-- TO DO -->
+    <div class="flex-1">
+      <task-board title="to do" (create)="openCreateModal()">
+        @for (task of (tasks$ | async) ?? []; track task.id) {
+        @if (task.status === "todo") {
+        <app-task-card [task]="task" (edit)="openEditModal($event)"
+          (delete)="onTaskDelete($event)" />
+        }
+        }
+      </task-board>
+    </div>
+
+    <!-- ON-GOING -->
+    <div class="flex-1">
+      <task-board title="In-progress" (create)="openCreateModal()">
+        @for (task of (tasks$ | async) ?? []; track task.id) {
+        @if (task.status === "pending") {
+        <app-task-card [task]="task" (edit)="openEditModal($event)"
+          (delete)="onTaskDelete($event)" />
+        }
+        }
+      </task-board>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="flex-1">
+      <task-board title="done" (create)="openCreateModal()">
+        @for (task of (tasks$ | async) ?? []; track task.id) {
+        @if (task.status === 'completed') {
+        <app-task-card [task]="task" (edit)="openEditModal($event)"
+          (delete)="onTaskDelete($event)" />
+        }
+        }
+      </task-board>
+    </div>
+  </div>
+  }
+
+  @if (selectedTab === 'users') {
+  <div class="grid grid-cols-4 gap-5 m-5">
+    @for (user of (users$ | async) ?? []; track user.id) {
+    <app-user-card
+      [userView]="user"
+      (select)="openUserSidebar($event)" />
+    }
+  </div>
+  }
+
+  <app-task-modal
+    [task]="selectedTask"
+    [isOpen]="isModalOpen"
+    (close)="isModalOpen = false">
+  </app-task-modal>
+</div>

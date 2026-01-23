@@ -1,0 +1,36 @@
+<div class="space-y-2">
+    <div class="flex rounded-md items-center justify-between border py-2 px-5">
+        <h2 class="text-2xl capitalize font-semibold">
+            {{ title }}
+        </h2>
+        <svg
+            (click)="onAddTask()"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-8 h-8 hover:bg-gray-200 p-1 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+    </div>
+
+    <div class="p-4 space-x-1 border rounded-lg bg-white">
+        <ng-content></ng-content>
+
+        <button
+            (click)="onAddTask()"
+            class="text-gray-500 mt-2 w-full flex items-center capitalize hover:bg-gray-100 p-2 rounded-md transition-colors duration-100">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            add task
+        </button>
+    </div>
+</div>

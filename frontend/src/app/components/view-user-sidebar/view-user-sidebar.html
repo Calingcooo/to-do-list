@@ -1,0 +1,83 @@
+@if (isOpen) {
+<div
+    class="w-1/4 h-full bg-gray-100 absolute top-0 right-0 z-10 transition-all duration-300">
+    <div class="w-full h-full relative p-5">
+        <span
+            (click)="toggleSideBar()"
+            class="text-lg absolute px-3 py-1 rounded-full right-3 top-2 cursor-pointer hover:bg-gray-300 text-gray-900">X</span>
+
+        <div class="pt-5">
+            <div class="flex justify-between w-full">
+                <div>
+                    <h1 class="capitalize">{{ selectedUser?.fullName }}</h1>
+                    <p class="text-sm text-gray-400 italic">{{
+                        selectedUser?.email
+                        }}</p>
+                </div>
+
+                <button
+                    (click)="onAddTaskForUser()"
+                    class="text-gray-500 mt-2 flex items-center capitalize hover:bg-gray-200 p-2 rounded-md transition-colors duration-100">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 mr-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    add task
+                </button>
+            </div>
+
+            <div class="flex gap-2 bg-gray-100 p-1 rounded-lg mt-5">
+                <button
+                    (click)="setStatus('todo')"
+                    [ngClass]="selectedStatus === 'todo'
+                        ? 'bg-white text-gray-900 shadow'
+                        : 'text-gray-500 hover:bg-white hover:text-gray-900'"
+                    class="flex-1 py-2 text-sm font-medium rounded-md transition">
+                    To do
+                </button>
+
+                <button
+                    (click)="setStatus('pending')"
+                    [ngClass]="selectedStatus === 'pending'
+                        ? 'bg-white text-gray-900 shadow'
+                        : 'text-gray-500 hover:bg-white hover:text-gray-900'"
+                    class="flex-1 py-2 text-sm font-medium rounded-md transition">
+                    In-progress
+                </button>
+
+                <button
+                    (click)="setStatus('completed')"
+                    [ngClass]="selectedStatus === 'completed'
+                        ? 'bg-white text-gray-900 shadow'
+                        : 'text-gray-500 hover:bg-white hover:text-gray-900'"
+                    class="flex-1 py-2 text-sm font-medium rounded-md transition">
+                    Done
+                </button>
+            </div>
+
+            <div class="h-px bg-gray-400 scale-y-50 origin-top mt-1 mb-3"></div>
+
+            <div class="mt-4 space-x-3">
+                @for (task of filteredTasks; track task.id) {
+                <app-task-card
+                    [task]="task"
+                    (edit)="onEdit($event)"
+                    (delete)="onDelete($event)" />
+                }
+
+                @if (filteredTasks.length === 0) {
+                <p class="text-sm text-gray-400 italic text-center mt-4">
+                    Empty
+                </p>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+}

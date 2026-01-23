@@ -1,0 +1,16 @@
+<div class="tabs-container m-5">
+  <div
+    class="inline-flex h-10 items-center justify-center rounded-md bg-gray-100 p-1 text-gray-500">
+    @for (tab of tabs; track tab.value) {
+    <button
+      (click)="selectTab(tab.value)"
+      class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium capitalize transition-all"
+      [ngClass]="{
+          'bg-blue-500 text-gray-200 shadow-sm': value === tab.value,
+          'hover:text-gray-800': value !== tab.value
+        }">
+      {{tab.label}}
+    </button>
+    }
+  </div>
+</div>
