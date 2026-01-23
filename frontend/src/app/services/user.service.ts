@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { getAuthHeaders } from '../utils/getAuthHeader.util';
 import type { FetchUsersResponse } from '../types/response.type';
-
+import type { Task } from '../types/task.type';
 import type { User } from '../types/user.type';
 
 @Injectable({
@@ -26,8 +26,6 @@ export class UserService {
       const response = await lastValueFrom(observable$);
 
       this.usersSubject.next(response.users);
-
-      console.log(response);
 
       return response.users;
     } catch (error: any) {

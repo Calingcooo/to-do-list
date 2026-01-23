@@ -14,6 +14,8 @@ export class ViewUserSidebar {
   @Input() isOpen: boolean = false;
   @Input() selectedUser?: User;
   @Output() closeSidebar = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
+  @Output() createTask = new EventEmitter<void>();
   @Output() edit = new EventEmitter<Task>();
   @Output() delete = new EventEmitter<Task>();
 
@@ -31,6 +33,10 @@ export class ViewUserSidebar {
 
   setStatus(status: 'todo' | 'pending' | 'completed') {
     this.selectedStatus = status;
+  }
+
+  onAddTaskForUser() {
+    this.createTask.emit();
   }
 
   onEdit(task: Task) {

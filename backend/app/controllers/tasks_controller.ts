@@ -16,12 +16,19 @@ export default class TasksController {
   }
 
   public async createTask({ request, auth, response }: HttpContext) {
+    console.log('create task!')
     const user = auth.user!
 
-    const payload = request.only(['title', 'description', 'status'])
+    const payload = request.only(['title', 'description', 'status', 'user_id'])
+
+    let assignedUserId = user.id
+
+    if (user.role === 'admin' && payload.user_id) {
+      assignedUserId = payload.user_id
+    }
 
     try {
-      const task = await Task.create({ ...payload, userId: user.id })
+      const task = await Task.create({ ...payload, userId: assignedUserId })
 
       return response.created(task)
     } catch (error) {

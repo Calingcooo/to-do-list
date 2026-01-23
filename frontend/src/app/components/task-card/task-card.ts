@@ -66,7 +66,7 @@ export class TaskCard {
     }
   }
 
-  onTaskDelete(task: Task) {
+  onDelete(task: Task) {
     this.delete.emit(task);
   }
 }

@@ -3,8 +3,8 @@
     [isOpen]="isSidebarOpen"
     [selectedUser]="selectedUser"
     (closeSidebar)="isSidebarOpen = false"
-    (edit)="openEditModal($event)" />
-  />
+    (edit)="openEditModal($event)"
+    (delete)="onTaskDelete($event)" />
   <app-header class="uppercase" [title]="taskflow" />
 
   @if ((authService.currentUser$ | async)?.role === 'admin') {
@@ -15,10 +15,11 @@
   <div class="flex flex-col md:flex-row gap-6 m-5">
     <!-- TO DO -->
     <div class="flex-1">
-      <task-board title="to do" (createTask)="openCreateModal()">
+      <task-board title="to do" (create)="openCreateModal()">
         @for (task of (tasks$ | async) ?? []; track task.id) {
         @if (task.status === "todo") {
-        <app-task-card [task]="task" (edit)="openEditModal($event)" />
+        <app-task-card [task]="task" (edit)="openEditModal($event)"
+          (delete)="onTaskDelete($event)" />
         }
         }
       </task-board>
@@ -26,10 +27,11 @@
 
     <!-- ON-GOING -->
     <div class="flex-1">
-      <task-board title="In-progress" (createTask)="openCreateModal()">
+      <task-board title="In-progress" (create)="openCreateModal()">
         @for (task of (tasks$ | async) ?? []; track task.id) {
         @if (task.status === "pending") {
-        <app-task-card [task]="task" (edit)="openEditModal($event)" />
+        <app-task-card [task]="task" (edit)="openEditModal($event)"
+          (delete)="onTaskDelete($event)" />
         }
         }
       </task-board>
@@ -37,10 +39,11 @@
 
     <!-- COMPLETED -->
     <div class="flex-1">
-      <task-board title="done" (createTask)="openCreateModal()">
+      <task-board title="done" (create)="openCreateModal()">
         @for (task of (tasks$ | async) ?? []; track task.id) {
         @if (task.status === 'completed') {
-        <app-task-card [task]="task" (edit)="openEditModal($event)" />
+        <app-task-card [task]="task" (edit)="openEditModal($event)"
+          (delete)="onTaskDelete($event)" />
         }
         }
       </task-board>

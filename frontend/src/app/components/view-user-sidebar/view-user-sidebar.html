@@ -7,10 +7,28 @@
             class="text-lg absolute px-3 py-1 rounded-full right-3 top-2 cursor-pointer hover:bg-gray-300 text-gray-900">X</span>
 
         <div class="pt-5">
-            <div>
-                <h1 class="capitalize">{{ selectedUser?.fullName }}</h1>
-                <p class="text-sm text-gray-400 italic">{{ selectedUser?.email
-                    }}</p>
+            <div class="flex justify-between w-full">
+                <div>
+                    <h1 class="capitalize">{{ selectedUser?.fullName }}</h1>
+                    <p class="text-sm text-gray-400 italic">{{
+                        selectedUser?.email
+                        }}</p>
+                </div>
+
+                <button
+                    (click)="onAddTaskForUser()"
+                    class="text-gray-500 mt-2 flex items-center capitalize hover:bg-gray-200 p-2 rounded-md transition-colors duration-100">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 mr-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    add task
+                </button>
             </div>
 
             <div class="flex gap-2 bg-gray-100 p-1 rounded-lg mt-5">
@@ -48,7 +66,8 @@
                 @for (task of filteredTasks; track task.id) {
                 <app-task-card
                     [task]="task"
-                    (edit)="onEdit($event)" />
+                    (edit)="onEdit($event)"
+                    (delete)="onDelete($event)" />
                 }
 
                 @if (filteredTasks.length === 0) {

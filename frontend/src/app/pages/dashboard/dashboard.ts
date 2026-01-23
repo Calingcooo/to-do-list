@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -40,6 +40,7 @@ export class Dashboard implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -103,6 +104,29 @@ export class Dashboard implements OnInit {
     this.isModalOpen = true;
   }
 
+  async onTaskDelete(task: Task) {
+    const confirmed = confirm(`Are you sure you want to delete "${task.title}"?`);
+
+    if (!confirmed) return;
+
+    try {
+      await this.taskService.deleteTask(task);
+
+      if (this.selectedUser?.tasks) {
+        this.selectedUser = {
+          ...this.selectedUser,
+          tasks: this.selectedUser.tasks.filter((t) => t.id !== task.id),
+        };
+
+        this.cdr.detectChanges();
+      }
+
+      await this.taskService.loadUserTasks();
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete task');
+    }
+  }
+
   onTabChange(tab: string) {
     this.selectedTab = tab;
     this.loadDataForTab(tab);
@@ -111,5 +135,31 @@ export class Dashboard implements OnInit {
       this.isSidebarOpen = false;
       this.selectedUser = undefined!;
     }
+  }
+
+  async onTaskCreateForUser(task: Task) {
+    if (!this.selectedUser) return;
+
+    const taskToCreate = { ...task, user_id: this.selectedUser.id };
+
+    const newTask = await this.taskService.createTask(taskToCreate);
+
+    this.selectedUser = {
+      ...this.selectedUser,
+      tasks: [newTask, ...(this.selectedUser.tasks ?? [])],
+    };
+
+    const updatedUsers = this.userService
+      .getUsers()
+      .map((user) =>
+        user.id === this.selectedUser!.id
+          ? { ...user, tasks: [newTask, ...(user.tasks ?? [])] }
+          : user,
+      );
+    this.userService['usersSubject'].next(updatedUsers);
+    this.cdr.detectChanges();
+  }
+  catch(err: any) {
+    alert(err.message || 'Failed to create task');
   }
 }

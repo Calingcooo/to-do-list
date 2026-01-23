@@ -9,9 +9,9 @@ import { TaskService } from '../../services/task.service';
 })
 export class TaskBoard {
   @Input() title!: string;
-  @Output() createTask = new EventEmitter<void>();
+  @Output() create = new EventEmitter<void>();
 
   onAddTask() {
-    this.createTask.emit();
+    this.create.emit();
   }
 }
