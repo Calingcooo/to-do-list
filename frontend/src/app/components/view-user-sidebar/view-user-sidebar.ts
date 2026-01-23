@@ -1,17 +1,21 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TaskCard } from '../task-card/task-card';
 import type { User } from '../../types/user.type';
+import type { Task } from '../../types/task.type';
 
 @Component({
   selector: 'app-view-user-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TaskCard],
   templateUrl: './view-user-sidebar.html',
 })
 export class ViewUserSidebar {
   @Input() isOpen: boolean = false;
   @Input() selectedUser?: User;
   @Output() closeSidebar = new EventEmitter<void>();
+  @Output() edit = new EventEmitter<Task>();
+  @Output() delete = new EventEmitter<Task>();
 
   selectedStatus: 'todo' | 'pending' | 'completed' = 'todo';
 
@@ -27,5 +31,13 @@ export class ViewUserSidebar {
 
   setStatus(status: 'todo' | 'pending' | 'completed') {
     this.selectedStatus = status;
+  }
+
+  onEdit(task: Task) {
+    this.edit.emit(task);
+  }
+
+  onDelete(task: Task) {
+    this.delete.emit(task);
   }
 }

@@ -42,12 +42,13 @@
                 </button>
             </div>
 
-            <div class="mt-4 space-y-3">
+            <div class="h-px bg-gray-400 scale-y-50 origin-top mt-1 mb-3"></div>
+
+            <div class="mt-4 space-x-3">
                 @for (task of filteredTasks; track task.id) {
-                <div class="p-3 rounded-md bg-white border border-gray-200">
-                    <p class="font-medium text-gray-900">{{ task.title }}</p>
-                    <p class="text-xs text-gray-500">{{ task.description }}</p>
-                </div>
+                <app-task-card
+                    [task]="task"
+                    (edit)="onEdit($event)" />
                 }
 
                 @if (filteredTasks.length === 0) {

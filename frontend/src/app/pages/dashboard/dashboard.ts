@@ -59,20 +59,23 @@ export class Dashboard implements OnInit {
     this.tasks$ = this.taskService.userTasks$;
     this.users$ = this.userService.users$;
 
+    await this.loadDataForTab(this.selectedTab);
+  }
+
+  private async loadDataForTab(tab: string) {
     this.isLoading = true;
+    this.errorMessage = '';
 
     try {
-      if (this.selectedTab === 'my_task') {
-        console.log(this.selectedTab);
+      if (tab === 'my_task') {
         await this.taskService.loadUserTasks();
       }
 
-      if (this.selectedTab === 'users') {
-        console.log(this.selectedTab);
+      if (tab === 'users') {
         await this.userService.loadUsers();
       }
     } catch (err: any) {
-      this.errorMessage = err.message || 'Something went wrong, please try again';
+      this.errorMessage = err.message || 'Something went wrong';
     } finally {
       this.isLoading = false;
     }
@@ -102,6 +105,7 @@ export class Dashboard implements OnInit {
 
   onTabChange(tab: string) {
     this.selectedTab = tab;
+    this.loadDataForTab(tab);
 
     if (tab !== 'users') {
       this.isSidebarOpen = false;

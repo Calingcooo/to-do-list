@@ -66,17 +66,7 @@ export class TaskCard {
     }
   }
 
-  async onTaskDelete() {
-    const confirmed = confirm(`Are you sure you want to delete "${this.task.title}"?`);
-
-    if (!confirmed) return;
-
-    try {
-      await this.taskService.deleteTask(this.task);
-
-      this.delete.emit(this.task);
-    } catch (err: any) {
-      alert(err.message || 'Failed to delete task');
-    }
+  onTaskDelete(task: Task) {
+    this.delete.emit(task);
   }
 }
