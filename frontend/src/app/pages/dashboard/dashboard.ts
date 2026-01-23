@@ -79,6 +79,8 @@ export class Dashboard implements OnInit {
   }
 
   openUserSidebar(user: User) {
+    if (this.selectedTab !== 'users') return;
+
     this.selectedUser = user;
     this.isSidebarOpen = true;
   }
@@ -99,8 +101,11 @@ export class Dashboard implements OnInit {
   }
 
   onTabChange(tab: string) {
-    console.log('value change!!');
-
     this.selectedTab = tab;
+
+    if (tab !== 'users') {
+      this.isSidebarOpen = false;
+      this.selectedUser = undefined!;
+    }
   }
 }
