@@ -5,4 +5,5 @@ export interface User {
   fullName: string;
   role: 'user' | 'admin';
   tasks: Task[];
+  taskCount: number;
 }

@@ -13,6 +13,19 @@ export class UserCard {
 
   constructor(private userService: UserService) {}
 
+  get roleBadge(): string {
+    switch (this.userView.role) {
+      case 'admin':
+        return 'bg-blue-100';
+
+      case 'user':
+        return 'bg-gray-100';
+
+      default:
+        return 'bg-gray-100';
+    }
+  }
+
   get roleClass(): string {
     switch (this.userView.role) {
       case 'admin':

@@ -41,12 +41,17 @@ export default class UsersController {
     }
 
     try {
-      const users = await User.query().whereNot('id', user.id)
+      const users = await User.query().whereNot('id', user.id).preload('tasks')
 
-      return response.ok({ users })
+      const usersWithTaskCount = users.map((u) => ({
+        ...u.serialize(),
+        taskCount: u.tasks.length,
+      }))
+
+      return response.ok({ users: usersWithTaskCount })
     } catch (error) {
       console.error(error)
-      return response.internalServerError({ error: error })
+      return response.internalServerError({ error })
     }
   }
 }

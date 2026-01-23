@@ -7,15 +7,17 @@
         </div>
 
         <div class="flex flex-col items-start justify-center">
-            <h1 class="text-gray-900 text-lg">{{ userView.fullName }}</h1>
-            <h3 class="text-gray-500 text-sm">test@email.com</h3>
+            <h1 class="text-gray-900 text-lg capitalize">{{ userView.fullName
+                }}</h1>
+            <h3 class="text-gray-500 text-sm">{{ userView.email }}</h3>
         </div>
     </div>
 
     <div class="h-px bg-gray-500 scale-y-50 origin-top my-3"></div>
 
     <div class="flex gap-5">
-        <div class="flex items-center gap-1 bg-blue-100 px-3 py-1 rounded-full">
+        <div class="flex items-center gap-1 px-3 py-1 rounded-full"
+            [class]="roleBadge">
             @if (userView.role === 'admin') {
             <svg class="w-4 h-4" viewBox="-3.2 -3.2 38.40 38.40"
                 enable-background="new 0 0 32 32" version="1.1"
@@ -55,7 +57,7 @@
         </div>
 
         <div class="flex items-center">
-            <p class="text-md text-gray-800">5 tasks</p>
+            <p class="text-md text-gray-800">{{ userView.taskCount }} tasks</p>
         </div>
     </div>
 
