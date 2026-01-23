@@ -1,0 +1,63 @@
+@if (isOpen) {
+<div
+    class="w-1/4 h-full bg-gray-100 absolute top-0 right-0 z-10 transition-all duration-300">
+    <div class="w-full h-full relative p-5">
+        <span
+            (click)="toggleSideBar()"
+            class="text-lg absolute px-3 py-1 rounded-full right-3 top-2 cursor-pointer hover:bg-gray-300 text-gray-900">X</span>
+
+        <div class="pt-5">
+            <div>
+                <h1 class="capitalize">{{ selectedUser?.fullName }}</h1>
+                <p class="text-sm text-gray-400 italic">{{ selectedUser?.email
+                    }}</p>
+            </div>
+
+            <div class="flex gap-2 bg-gray-100 p-1 rounded-lg mt-5">
+                <button
+                    (click)="setStatus('todo')"
+                    [ngClass]="selectedStatus === 'todo'
+                        ? 'bg-white text-gray-900 shadow'
+                        : 'text-gray-500 hover:bg-white hover:text-gray-900'"
+                    class="flex-1 py-2 text-sm font-medium rounded-md transition">
+                    To do
+                </button>
+
+                <button
+                    (click)="setStatus('pending')"
+                    [ngClass]="selectedStatus === 'pending'
+                        ? 'bg-white text-gray-900 shadow'
+                        : 'text-gray-500 hover:bg-white hover:text-gray-900'"
+                    class="flex-1 py-2 text-sm font-medium rounded-md transition">
+                    In-progress
+                </button>
+
+                <button
+                    (click)="setStatus('completed')"
+                    [ngClass]="selectedStatus === 'completed'
+                        ? 'bg-white text-gray-900 shadow'
+                        : 'text-gray-500 hover:bg-white hover:text-gray-900'"
+                    class="flex-1 py-2 text-sm font-medium rounded-md transition">
+                    Done
+                </button>
+            </div>
+
+            <div class="mt-4 space-y-3">
+                @for (task of filteredTasks; track task.id) {
+                <div class="p-3 rounded-md bg-white border border-gray-200">
+                    <p class="font-medium text-gray-900">{{ task.title }}</p>
+                    <p class="text-xs text-gray-500">{{ task.description }}</p>
+                </div>
+                }
+
+                @if (filteredTasks.length === 0) {
+                <p class="text-sm text-gray-400 italic text-center mt-4">
+                    Empty
+                </p>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+}

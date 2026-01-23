@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import type { User } from '../../types/user.type';
 
@@ -9,6 +9,12 @@ import type { User } from '../../types/user.type';
 })
 export class UserCard {
   @Input({ required: true }) userView!: User;
+  @Output() select = new EventEmitter<User>();
+
+  onSelect() {
+    this.select.emit(this.userView);
+  }
+
   errorMessage = '';
 
   constructor(private userService: UserService) {}
@@ -34,5 +40,9 @@ export class UserCard {
       case 'user':
         return 'bg-gray-100';
     }
+  }
+
+  onClickUser() {
+    this.select.emit(this.userView);
   }
 }

@@ -11,18 +11,20 @@ import { TaskCard } from '../../components/task-card/task-card';
 import { TaskModal } from '../../components/task-modal/task-modal';
 import { UserCard } from '../../components/user-card/user-card';
 import { Tabs } from '../../components/tabs/tabs';
+import { ViewUserSidebar } from '../../components/view-user-sidebar/view-user-sidebar';
 import type { Task } from '../../types/task.type';
 import type { User } from '../../types/user.type';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, Header, TaskBoard, UserCard, TaskCard, TaskModal, Tabs],
+  imports: [CommonModule, Header, TaskBoard, UserCard, TaskCard, TaskModal, Tabs, ViewUserSidebar],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
   selectedTab: string = 'my_task';
   taskflow = 'TaskFlow';
+  selectedUser!: User;
+  isSidebarOpen = false;
 
   tasks$!: Observable<Task[]>;
   users$!: Observable<User[]>;
@@ -74,6 +76,11 @@ export class Dashboard implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  openUserSidebar(user: User) {
+    this.selectedUser = user;
+    this.isSidebarOpen = true;
   }
 
   openCreateModal() {
