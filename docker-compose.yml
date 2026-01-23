@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: node:20-alpine
+    container_name: backend
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - "3333:3333"
+    depends_on:
+      - postgres
+    environment:
+      DB_CONNECTION: pg
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_USER: app_user
+      PG_PASSWORD: secret
+      PG_DB_NAME: app_db
+      NODE_ENV: development
+    command: sh -c "npm install && npm run dev --watch"
+
+  frontend:
+    image: node:20-alpine
+    container_name: frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    command: sh -c "npm install && npm run start -- --host"
+
+volumes:
+  postgres_data:
