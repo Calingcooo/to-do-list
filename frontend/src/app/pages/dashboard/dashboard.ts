@@ -12,12 +12,23 @@ import { TaskModal } from '../../components/task-modal/task-modal';
 import { UserCard } from '../../components/user-card/user-card';
 import { Tabs } from '../../components/tabs/tabs';
 import { ViewUserSidebar } from '../../components/view-user-sidebar/view-user-sidebar';
+import { UserModal } from '../../components/user-modal/user-modal';
 import type { Task } from '../../types/task.type';
 import type { User } from '../../types/user.type';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, Header, TaskBoard, UserCard, TaskCard, TaskModal, Tabs, ViewUserSidebar],
+  imports: [
+    CommonModule,
+    Header,
+    TaskBoard,
+    UserCard,
+    TaskCard,
+    TaskModal,
+    Tabs,
+    ViewUserSidebar,
+    UserModal,
+  ],
   templateUrl: './dashboard.html',
 })
 export class Dashboard implements OnInit {
@@ -31,6 +42,7 @@ export class Dashboard implements OnInit {
 
   selectedTask!: Task;
   isModalOpen = false;
+  isUserModalOpen = false;
   errorMessage = '';
   isLoading = false;
 
@@ -104,6 +116,16 @@ export class Dashboard implements OnInit {
     this.isModalOpen = true;
   }
 
+  openUserModal() {
+    this.isModalOpen = false;
+    this.isUserModalOpen = true;
+  }
+
+  closeUserModal() {
+    console.log('dashboard receiving event!');
+    this.isUserModalOpen = false;
+  }
+
   async onTaskDelete(task: Task) {
     const confirmed = confirm(`Are you sure you want to delete "${task.title}"?`);
 
@@ -159,7 +181,6 @@ export class Dashboard implements OnInit {
     this.userService['usersSubject'].next(updatedUsers);
     this.cdr.detectChanges();
   }
-  catch(err: any) {
-    alert(err.message || 'Failed to create task');
-  }
+
+  async addNewUser(user: User) {}
 }

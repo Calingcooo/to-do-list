@@ -8,7 +8,14 @@
   <app-header class="uppercase" [title]="taskflow" />
 
   @if ((authService.currentUser$ | async)?.role === 'admin') {
-  <app-tabs [value]="selectedTab" (valueChange)="onTabChange($event)" />
+  <div class="flex justify-between m-5">
+    <app-tabs [value]="selectedTab" (valueChange)="onTabChange($event)" />
+    <button
+      class="bg-blue-500 hover:bg-blue-600 px-2 text-gray-100 capitalize rounded-md"
+      (click)="openUserModal()">
+      add new user
+    </button>
+  </div>
   }
 
   @if (selectedTab === 'my_task') {
@@ -66,4 +73,12 @@
     [isOpen]="isModalOpen"
     (close)="isModalOpen = false">
   </app-task-modal>
+
+  @if (isUserModalOpen) {
+  <app-user-modal
+    (closeModal)="isUserModalOpen = false"
+    (create)="addNewUser($event)"
+    (closeModal)="closeUserModal()">
+  </app-user-modal>
+  }
 </div>

@@ -16,10 +16,13 @@ export default class TasksController {
   }
 
   public async createTask({ request, auth, response }: HttpContext) {
-    console.log('create task!')
     const user = auth.user!
 
     const payload = request.only(['title', 'description', 'status', 'user_id'])
+
+    if (!payload.title || payload.title.trim() === '') {
+      return response.badRequest({ message: 'Title is required' })
+    }
 
     let assignedUserId = user.id
 
