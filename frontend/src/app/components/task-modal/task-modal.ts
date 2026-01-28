@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
@@ -21,7 +21,10 @@ export class TaskModal {
   isSaving = false;
   errorMessage = '';
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   get isCreateMode() {
     return !this.tempTask?.id;
@@ -62,8 +65,8 @@ export class TaskModal {
       this.create.emit(newTask);
       this.onClose();
     } catch (err: any) {
-      this.errorMessage = err.message || 'Failed to create task';
-      console.error('Error creating task:', err);
+      this.errorMessage = err?.message || 'Failed to create task';
+      this.cdr.detectChanges();
     } finally {
       this.isSaving = false;
     }
@@ -72,5 +75,6 @@ export class TaskModal {
   onClose() {
     this.isOpen = false;
     this.close.emit();
+    this.errorMessage = '';
   }
 }

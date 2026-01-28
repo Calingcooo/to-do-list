@@ -28,7 +28,7 @@ router
         .delete('delete/:id', [TasksController, 'destroy'])
         .where('id', router.matchers.number()))
   })
-  .prefix('task')
+  .prefix('api/task')
   .use(middleware.auth({ guards: ['api'] }))
 
 router
@@ -36,11 +36,11 @@ router
     ;(router.post('new-user', [UsersController, 'newUser']),
       router.get('all', [UsersController, 'getAllUsers']))
   })
-  .prefix('user')
+  .prefix('api/user')
   .use(middleware.auth({ guards: ['api'] }))
 
 router
   .group(() => {
     ;(router.post('login', [AuthController, 'index']), router.get('me', [AuthController, 'me']))
   })
-  .prefix('auth')
+  .prefix('api/auth')
