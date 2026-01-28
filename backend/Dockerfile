@@ -9,6 +9,8 @@ RUN npm install
 
 COPY . .
 
+RUN node ace db:seed
+
 RUN node ace build --production
 
 EXPOSE 3333

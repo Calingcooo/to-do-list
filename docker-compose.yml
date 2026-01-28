@@ -32,7 +32,7 @@ services:
       PG_PASSWORD: secret
       PG_DB_NAME: app_db
       NODE_ENV: development
-    command: sh -c "npm install && npm run dev --watch"
+    command: sh -c "npm install && node ace migration:run && node ace db:seed && npm run dev --watch"
 
   frontend:
     image: node:20-alpine
