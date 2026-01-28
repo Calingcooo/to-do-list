@@ -23,10 +23,27 @@ export default class UsersController {
 
     const data = request.only(['fullName', 'email', 'password', 'role'])
 
+    const existingUser = await User.findBy('email', data.email)
+    if (existingUser) {
+      return response.badRequest({ message: 'Email is already used' })
+    }
+
+    if (existingUser) {
+      return response.badRequest({ message: 'Email is alread used.' })
+    }
+
     try {
       const createdUser = await User.create(data)
 
-      return response.ok(createdUser)
+      return response.ok({
+        user: {
+          id: createdUser.id,
+          fullName: createdUser.fullName,
+          email: createdUser.email,
+          role: createdUser.role,
+          createdAt: createdUser.createdAt,
+        },
+      })
     } catch (error) {
       console.error(error)
       return response.internalServerError({ error: error })
