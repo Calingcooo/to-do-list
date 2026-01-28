@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/user.service';
+import type { User } from '../../types/user.type';
 
 @Component({
   selector: 'app-user-modal',
@@ -10,28 +12,40 @@ import { CommonModule } from '@angular/common';
 })
 export class UserModal {
   @Output() closeModal = new EventEmitter<void>();
-  @Output() create = new EventEmitter<any>();
 
-  form = {
+  form: Partial<User> = {
     fullName: '',
     email: '',
-    role: '',
+    role: 'user',
     password: '',
   };
 
   isSaving = false;
   errorMessage = '';
 
+  constructor(
+    private userService: UserService,
+    private cdr: ChangeDetectorRef,
+  ) {}
+
   close() {
     this.closeModal.emit();
   }
 
-  submit() {
+  async submit() {
     if (!this.form.email || !this.form.password) {
       this.errorMessage = 'Email and password are required';
       return;
     }
 
-    this.create.emit(this.form);
+    try {
+      await this.userService.createUser(this.form);
+
+      this.close();
+      this.cdr.detectChanges();
+    } catch (error: any) {
+      this.errorMessage = error?.message || 'Failed to create user.';
+      this.cdr.detectChanges();
+    }
   }
 }

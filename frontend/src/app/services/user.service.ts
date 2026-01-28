@@ -37,4 +37,27 @@ export class UserService {
   getUsers(): User[] {
     return this.usersSubject.value;
   }
+
+  async createUser(userData: Partial<User>): Promise<User> {
+    const observable$ = this.http.post<{ user: User }>(
+      `${environment.apiUrl}/user/new-user`,
+      userData,
+      {
+        headers: getAuthHeaders(),
+      },
+    );
+
+    try {
+      const response = await lastValueFrom(observable$);
+
+      const currentUsers = this.usersSubject.value;
+      this.usersSubject.next([...currentUsers, response.user]);
+
+      return response.user;
+    } catch (error: any) {
+      console.log(error);
+      const message = error.error?.message || error.message || 'Cannot create user';
+      throw new Error(message);
+    }
+  }
 }
