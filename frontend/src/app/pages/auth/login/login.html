@@ -1,5 +1,6 @@
 <div class="min-w-svh min-h-svh flex items-center justify-center">
-  <form class="shadow-md w-1/4 rounded-md p-5" (ngSubmit)="onSubmit()" #f="ngForm">
+  <form class="shadow-md w-1/4 rounded-md p-5" (ngSubmit)="onSubmit()"
+    #f="ngForm">
     <h1 class="text-center text-2xl font-bold mb-5">TASKFLOW</h1>
 
     <div class="flex flex-col gap-4 max-w-sm">
@@ -14,8 +15,7 @@
           placeholder="you@example.com"
           [(ngModel)]="email"
           required
-          class="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-        />
+          class="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
       </div>
 
       <div class="flex flex-col gap-1">
@@ -29,29 +29,29 @@
           placeholder="••••••••"
           [(ngModel)]="password"
           required
-          class="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-        />
+          class="px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
       </div>
     </div>
 
     @if (errorMessage) {
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mt-4 rounded">
-        <p class="text-sm">{{ errorMessage }}</p>
-      </div>
+    <div
+      class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mt-4 rounded">
+      <p class="text-sm">{{ errorMessage }}</p>
+    </div>
     }
-    
+
     <button
       type="submit"
       [disabled]="isLoading"
-      class="bg-blue-500 hover:bg-blue-600 w-full mt-5 py-2 rounded-lg text-gray-200 uppercase"
-    >
+      class="bg-blue-500 hover:bg-blue-600 w-full mt-5 py-2 rounded-lg text-gray-200 uppercase">
       {{ isLoading ? 'Logging in…' : 'Login' }}
     </button>
 
     <div class="bg-blue-200 mt-5 p-2 rounded-sm text-gray-800 space-y-1">
       <h1 class="text-xs capitalize">default admin credentials</h1>
-      <p class="text-xs">email: </p>
-      <p class="text-xs">password: </p>
+      <p class="text-xs">email: <span
+          class="italic font-bold">test@admin.com</span></p>
+      <p class="text-xs">password: <span class="font-bold">1234567</span></p>
     </div>
   </form>
 </div>

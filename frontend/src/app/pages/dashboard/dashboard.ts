@@ -182,5 +182,5 @@ export class Dashboard implements OnInit {
     this.cdr.detectChanges();
   }
 
-  async addNewUser(user: User) {}
+  async addNewUser(user: Event) {}
 }
